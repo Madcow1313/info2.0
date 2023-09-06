@@ -1,8 +1,5 @@
 .parent {
 	display: flex !important;
-}
-
-.jc-center {
 	justify-content: center !important; 
 }
 
@@ -11,6 +8,7 @@
 	float: left;
 	margin-top: 40px;
 	margin-right: 40px;
+	padding-bottom: 40px;
 	size: auto;
 	background: none;
 	font-size: 2em;

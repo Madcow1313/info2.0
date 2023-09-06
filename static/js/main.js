@@ -1,13 +1,16 @@
-const btn = document.getElementById('btn')
-const aboutBtn = document.getElementById('about_btn')
-const homePage = '/'
-const about = '/about.html'
+const btn = document.getElementById('btn');
+const aboutBtn = document.getElementById('about_btn');
+const homePage = '/';
+const dataBtn = document.getElementById('data_btn');
+
+const mainBtns = document.getElementsByClassName('buttons');
 
 btn.addEventListener('click', ()=> {
 	location.href = homePage
-	console.log('wtf')
 })
 
-aboutBtn.addEventListener('click', ()=> {
-	location.href = aboutBtn.getAttribute('href')
-})
+for (const el of mainBtns) {
+	el.addEventListener('click', () => {
+		location.href = el.getAttribute('href')
+	});
+};
