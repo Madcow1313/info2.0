@@ -1,0 +1,13 @@
+.buttons {
+	border: none;
+	margin-left: -10px;
+	margin-top: 10px;
+	min-height: 100px;
+	min-width: 150px;
+	float: left;
+	align-self: center;
+}
+body {
+	background: linear-gradient(254deg, #861BE3 0%, #00FFC1 100%);
+	background-attachment: fixed;
+}
