@@ -1,0 +1,36 @@
+.parent {
+	display: flex !important;
+}
+
+.jc-center {
+	justify-content: center !important; 
+}
+
+.buttons {
+	border: none;
+	float: left;
+	margin-top: 40px;
+	margin-right: 40px;
+	size: auto;
+	background: none;
+	font-size: 2em;
+	/* font-family: "Lucida Handwriting", cursive; */
+	font-family:  SB Sans Text;
+	color: antiquewhite;
+	min-width: fit-content;
+}
+
+.btn:hover {
+	cursor: pointer;
+}
+
+.buttons:hover {
+	color: #00FFC1;
+	cursor: pointer;
+	text-decoration:underline;
+}
+
+/* body {
+	background: linear-gradient(254deg, #861BE3 0%, #00FFC1 100%);
+	background-attachment: fixed;
+} */
