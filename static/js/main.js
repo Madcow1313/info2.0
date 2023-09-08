@@ -1,11 +1,11 @@
-const btn = document.getElementById('btn');
+const hp = document.getElementById('homepage_btn');
 const aboutBtn = document.getElementById('about_btn');
 const homePage = '/';
 const dataBtn = document.getElementById('data_btn');
 
 const mainBtns = document.getElementsByClassName('buttons');
 
-btn.addEventListener('click', ()=> {
+hp.addEventListener('click', ()=> {
 	location.href = homePage
 })
 

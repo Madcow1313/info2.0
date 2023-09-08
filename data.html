@@ -7,6 +7,28 @@
 	<body>
 		{{ .header }}{{ .main_buttons }}
         <br><br><br><br><br><br>
-    </p>
+		<div class="parent">
+			<button id="create_btn" class="CRUD_buttons">Create</button>
+			<button id="read_btn" class="CRUD_buttons" style="padding: 10px 56px;">Read</button>
+			<button id="update_btn" class="CRUD_buttons">Update</button>
+			<button id="delete_btn" class="CRUD_buttons" >Delete</button>
+		</div>
+		<br>
+		<div class="parent">
+		<label style="margin: 22.5px; margin-left: 10px;">Select table to perform operation</label>
+			<select name:="tables" id="tables" class="dropdown" style="margin: 10px; margin-left:-10px">
+			<option value="test1" label="test1"	 class="dropdown-content"></option>
+			<option value="test2" label="test2" class="dropdown-content"></option></select>
+		</div>
+		<div class="parent">
+			<div id="create_fields" style="display: none;">
+				<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">values</label>
+				<form>
+				<input id="insert_values" class="input_fields" type="text" placeholder="insert here">
+				</form>
+				<input type="submit" class="CRUD_buttons">
+			</div>
+		</div>
+		<script src="./static/js/crud.js"></script>
 	</body>
 </html>

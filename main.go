@@ -18,5 +18,11 @@ func main() {
 	router.GET("/about.html", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "about.html", data.fields)
 	})
+	router.GET("/data.html", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "data.html", data.fields)
+	})
+	router.GET("/data.html/:create", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "about.html", data.fields)
+	})
 	router.Run()
 }

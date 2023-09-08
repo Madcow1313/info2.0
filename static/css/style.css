@@ -28,6 +28,80 @@
 	text-decoration:underline;
 }
 
+.CRUD_buttons {
+	/* Роль=Primary, Тип=Text, Состояние=Default */
+	cursor: pointer;
+	border: none;
+/* Auto layout */
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-right: 0.5px;
+	padding: 10px 48px;
+
+
+
+
+	background: #44EB99;
+	border-radius: 8px;
+
+
+	width: 140px;
+	height: 40px;
+
+	font-family: 'SB Sans Display';
+	font-style: normal;
+	font-weight: 400;
+	font-size: auto;
+	line-height: 20px;
+
+	color: #212121;
+}
+
+.CRUD_buttons:hover {
+	background: #A24FEA;
+	color :white;
+}
+
+.CRUD_buttons:active {
+	background: #861BE3;
+}
+
+
+.dropdown {
+	display: hide;
+	position: relative;
+	min-width: fit-content;
+	width: 336px;
+	height: 40px;
+	border-radius: 8px;
+	border-color: grey;
+	background-color: white;
+	padding: 10px;	
+}
+
+.dropdown:hover {
+	border-color: #861BE3 ;
+}
+
+input[type='text'] {
+	width: 336px;
+	height: 40px;
+	border: none;
+	text-align: top;
+	background-color: whitesmoke;
+	border-radius: 8px;
+	margin: 10px;
+	margin-top: 25px;
+}
+
+input[type='submit'] {
+	margin-top: 25.5px;
+	height: 40px;
+	padding-top: 10px;
+	padding-left: 20px;
+}
+
 /* body {
 	background: linear-gradient(254deg, #861BE3 0%, #00FFC1 100%);
 	background-attachment: fixed;
