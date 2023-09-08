@@ -20,10 +20,22 @@ func (d *Data) fillMain() {
 	<script src="./static/js/main.js"></script></div>`)
 }
 
-
-func (d *Data) fillCRUD() {
-	
-} 
+func (d *Data) fillBaseData(c *gin.Context) {
+	param := c.Param("btn")
+	if param == ":create_btn" {
+		d.fields["data"] = template.HTML(`
+			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">values</label>
+			<form>
+			<input id="insert_values" class="input_fields" type="text" placeholder="insert here">
+			</form>
+			<input type="submit" class="CRUD_buttons">
+		`)
+	} else if param == ":read_btn" {
+		d.fields["data"] = template.HTML(`
+				<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">Test</label>
+		`)
+	}
+}
 
 func loadFiles(engine *gin.Engine) {
 	engine.LoadHTMLFiles("index.html", "about.html", "operations.html", "data.html")

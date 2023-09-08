@@ -21,12 +21,8 @@
 			<option value="test2" label="test2" class="dropdown-content"></option></select>
 		</div>
 		<div class="parent">
-			<div id="create_fields" style="display: none;">
-				<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">values</label>
-				<form>
-				<input id="insert_values" class="input_fields" type="text" placeholder="insert here">
-				</form>
-				<input type="submit" class="CRUD_buttons">
+			<div id="fields" style="display: none;">
+			{{ .data }}
 			</div>
 		</div>
 		<script src="./static/js/crud.js"></script>
