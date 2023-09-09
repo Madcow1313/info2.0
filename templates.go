@@ -28,7 +28,7 @@ func (d *Data) fillBaseData(c *gin.Context) {
 			<form>
 			<input id="insert_values" class="input_fields" type="text" placeholder="insert here">
 			</form>
-			<input type="submit" class="CRUD_buttons">
+			<input type="submit" class="submit_buttons">
 		`)
 	} else if param == ":read_btn" {
 		d.fields["data"] = template.HTML(`
@@ -50,7 +50,7 @@ func (d *Data) fillBaseData(c *gin.Context) {
 			<form>
 			<input id="insert_values" class="input_fields" type="text" placeholder="condition">
 			</form>
-			<input type="submit" class="CRUD_buttons">
+			<input type="submit" class="submit_buttons">
 		`)
 	} else if param == ":delete_btn" {
 		d.fields["data"] = template.HTML(`
@@ -63,7 +63,7 @@ func (d *Data) fillBaseData(c *gin.Context) {
 			<form>
 			<input id="insert_values" class="input_fields" type="text" placeholder="condition">
 			</form>
-			<input type="submit" class="CRUD_buttons">
+			<input type="submit" class="submit_buttons">
 		`)
 	}
 }

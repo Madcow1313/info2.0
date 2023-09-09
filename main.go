@@ -28,5 +28,8 @@ func main() {
 		data.fillBaseData(ctx)
 		ctx.HTML(http.StatusOK, "data.html", data.fields)
 	})
+	router.GET("/operations.html", func(ctx *gin.Context) {
+		ctx.HTML(http.StatusOK, "operations.html", data.fields)
+	})
 	router.Run()
 }

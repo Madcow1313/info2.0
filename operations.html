@@ -6,5 +6,21 @@
 	</head>
 	<body>
 		{{ .header }} {{ .main_buttons }}
+		<div class="parent">
+			<label style="margin: 22.5px; margin-top: 53px; margin-left: 10px;">Select stored procedure</label>
+				<select name:="tables" id="tables" class="dropdown" style="margin: 10px; margin-top: 40px; margin-left:-10px">
+				<option value="test1" label="test1"	 class="dropdown-content"></option>
+				<option value="test2" label="test2" class="dropdown-content"></option></select>
+				<input type="submit" class="submit_buttons" style="margin-top: 39px; width:50px; padding-left: 25px;" value="Go!">
+				<input type="submit" class="submit_buttons" style="margin-top: 39px; margin-left: 10px; width:50px; padding-left: 22px;" value="Help">
+			</div>
+		<div class="parent">
+			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">SQL-query</label>
+			<form>
+				<input id="insert_values" class="input_fields" type="text" placeholder="SELECT * FROM table;">
+				</form>
+				<input type="submit" class="submit_buttons" value="Execute" style="padding-left: 48px;">
+		</div>
+
 	</body>
 </html>

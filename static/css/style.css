@@ -28,7 +28,9 @@
 	text-decoration:underline;
 }
 
-.CRUD_buttons {
+.CRUD_buttons,
+.load_buttons,
+.submit_buttons {
 	/* Роль=Primary, Тип=Text, Состояние=Default */
 	cursor: pointer;
 	border: none;
@@ -38,9 +40,6 @@
 	align-items: center;
 	margin-right: 0.5px;
 	padding: 10px 48px;
-
-
-
 
 	background: #44EB99;
 	border-radius: 8px;
@@ -58,12 +57,12 @@
 	color: #212121;
 }
 
-.CRUD_buttons:hover {
+.CRUD_buttons:hover, .load_buttons:hover, .submit_buttons:hover {
 	background: #A24FEA;
 	color :white;
 }
 
-.CRUD_buttons:active {
+.CRUD_buttons:active, .load_buttons:active, .submit_buttons:active {
 	background: #861BE3;
 }
 
@@ -77,7 +76,8 @@
 	border-radius: 8px;
 	border-color: grey;
 	background-color: white;
-	padding: 10px;	
+	padding: 10px;
+	cursor: pointer;
 }
 
 .dropdown:hover {
