@@ -1,35 +1,27 @@
 package main
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	"fmt"
+	"info2_0/model"
+	"info2_0/view"
+	"os"
 )
 
+func initView(iv view.IView) {
+	iv.Init()
+}
+
 func main() {
-	var data Data
-	data.fields = make(map[string]any)
-	data.fillMain()
-	router := gin.Default()
-	loadFiles(router)
-	router.GET("/", func(c *gin.Context) {
-		data.fields["data"] = ""
-		c.HTML(http.StatusOK, "index.html", data.fields)
-	})
-	router.GET("/about.html", func(ctx *gin.Context) {
-		data.fields["data"] = ""
-		ctx.HTML(http.StatusOK, "about.html", data.fields)
-	})
-	router.GET("/data.html", func(ctx *gin.Context) {
-		data.fillBaseData(ctx)
-		ctx.HTML(http.StatusOK, "data.html", data.fields)
-	})
-	router.GET("/data.html/:btn", func(ctx *gin.Context) {
-		data.fillBaseData(ctx)
-		ctx.HTML(http.StatusOK, "data.html", data.fields)
-	})
-	router.GET("/operations.html", func(ctx *gin.Context) {
-		ctx.HTML(http.StatusOK, "operations.html", data.fields)
-	})
-	router.Run()
+
+	var m model.Model
+
+	b, err := os.ReadFile("config.json")
+	if err == nil {
+		fmt.Printf("Couldn't open config.json: %v", err)
+		m.StatusConnected = false
+		m.ConnectToDB(b)
+	}
+	defer m.DB.Close()
+	v := new(view.View)
+	initView(v)
 }
