@@ -11,17 +11,26 @@ func initView(iv view.IView) {
 	iv.Init()
 }
 
+func initModel(im model.IModel, pathToConfig string) error {
+	b, err := os.ReadFile(pathToConfig)
+	if err == nil {
+		im.ConnectToDB(b)
+	} else {
+		fmt.Printf("Couldn't open config.json: %v", err)
+		return err
+	}
+	return nil
+}
+
 func main() {
 
-	var m model.Model
+	m := new(model.Model)
 
-	b, err := os.ReadFile("config.json")
-	if err == nil {
-		fmt.Printf("Couldn't open config.json: %v", err)
-		m.StatusConnected = false
-		m.ConnectToDB(b)
+	if err := initModel(m, "config.json"); err == nil {
+		m.StatusConnected = true
+		fmt.Println("DB connected")
+		defer m.DB.Close()
 	}
-	defer m.DB.Close()
 	v := new(view.View)
 	initView(v)
 }

@@ -15,8 +15,8 @@ type IView interface {
 	Init()
 	HandleQuery(query string)
 	SetData(page string, data string)
-	GET(request string)
-	POST(request string)
+	GET(request []interface{})
+	POST(request []interface{})
 }
 
 type View struct {
@@ -98,7 +98,11 @@ func (v *View) Init() {
 	v.Data = data
 	v.Router = router
 	loadFiles(v.Router)
+	v.GET(nil)
+	v.Router.Run()
+}
 
+func (v *View) GET(request []interface{}) {
 	v.Router.GET("/", func(c *gin.Context) {
 		v.Data.Fields["data"] = ""
 		c.HTML(http.StatusOK, "index.html", v.Data.Fields)
@@ -118,11 +122,8 @@ func (v *View) Init() {
 	v.Router.GET("/operations.html", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "operations.html", v.Data.Fields)
 	})
-
-	v.Router.Run()
 }
 
-func (v *View) GET(request string)               {}
-func (v *View) POST(request string)              {}
+func (v *View) POST(request []interface{})       {}
 func (v *View) HandleQuery(string)               {}
 func (v *View) SetData(page string, data string) {}

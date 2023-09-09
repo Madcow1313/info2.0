@@ -8,7 +8,7 @@ import (
 )
 
 type IModel interface {
-	ConnectToDB(configFile []byte) error
+	ConnectToDB(rawConfigFile json.RawMessage) error
 	SendResult() ([]byte, error)
 }
 
@@ -38,6 +38,8 @@ func (m *Model) ConnectToDB(rawConfigFile json.RawMessage) error {
 	return nil
 }
 
-func (m *Model) Create(values...string) {
+func (m *Model) SendResult() ([]byte, error) { return nil, nil }
+
+func (m *Model) Create(values ...string) {
 
 }
