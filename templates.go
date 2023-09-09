@@ -24,7 +24,7 @@ func (d *Data) fillBaseData(c *gin.Context) {
 	param := c.Param("btn")
 	if param == ":create_btn" {
 		d.fields["data"] = template.HTML(`
-			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">values</label>
+			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">insert values</label>
 			<form>
 			<input id="insert_values" class="input_fields" type="text" placeholder="insert here">
 			</form>
@@ -33,6 +33,37 @@ func (d *Data) fillBaseData(c *gin.Context) {
 	} else if param == ":read_btn" {
 		d.fields["data"] = template.HTML(`
 				<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">Test</label>
+		`)
+	} else if param == ":update_btn" {
+		d.fields["data"] = template.HTML(`
+			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">update</label>
+			<form>
+			<input id="insert_values" class="input_fields" type="text" placeholder="id, name, e.t.c.">
+			</form>
+			<br>
+			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">values</label>
+			<form>
+			<input id="insert_values" class="input_fields" type="text" placeholder="1, Komi, e.t.c.">
+			</form>
+			<br>
+			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">where</label>
+			<form>
+			<input id="insert_values" class="input_fields" type="text" placeholder="condition">
+			</form>
+			<input type="submit" class="CRUD_buttons">
+		`)
+	} else if param == ":delete_btn" {
+		d.fields["data"] = template.HTML(`
+			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">delete</label>
+			<form>
+			<input id="insert_values" class="input_fields" type="text" placeholder="wildcard or empty">
+			</form>
+			<br>
+			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">where</label>
+			<form>
+			<input id="insert_values" class="input_fields" type="text" placeholder="condition">
+			</form>
+			<input type="submit" class="CRUD_buttons">
 		`)
 	}
 }

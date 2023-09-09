@@ -18,10 +18,7 @@ for (const btn of crudButtons) {
                 xhr.open("GET", "http://localhost:8080/data.html/:" + el[0])
                 xhr.send()
                 xhr.onload = ()=> {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-						document.getElementById('fields').innerHTML
-						.replace('{{ .data }}', xhr.responseText)
-					}
+                    location.reload()
                 }
             }
         }
