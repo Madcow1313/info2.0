@@ -1,7 +1,9 @@
 package view
 
 import (
+	"fmt"
 	"html/template"
+	"info2_0/model"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -12,7 +14,7 @@ type Fields struct {
 }
 
 type IView interface {
-	Init()
+	Init(model.IModel)
 	HandleQuery(query string)
 	SetData(page string, data string)
 	GET(request []interface{})
@@ -22,6 +24,7 @@ type IView interface {
 type View struct {
 	Router *gin.Engine
 	Data   Fields
+	model  model.IModel
 }
 
 func (d *Fields) FillMain() {
@@ -33,10 +36,10 @@ func (d *Fields) FillMain() {
 	<script src="./static/js/main.js"></script></div>`)
 }
 
-func (d *Fields) FillBaseData(c *gin.Context) {
+func (v *View) FillBaseData(c *gin.Context) {
 	param := c.Param("btn")
 	if param == ":create_btn" {
-		d.Fields["data"] = template.HTML(`
+		v.Data.Fields["data"] = template.HTML(`
 			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">insert values</label>
 			<form>
 			<input id="insert_values" class="input_fields" type="text" placeholder="insert here">
@@ -44,11 +47,17 @@ func (d *Fields) FillBaseData(c *gin.Context) {
 			<input type="submit" class="submit_buttons">
 		`)
 	} else if param == ":read_btn" {
-		d.Fields["data"] = template.HTML(`
+		res, _ := v.model.Read("p2p")
+		var htmlString string
+		for _, str := range res {
+			htmlString += fmt.Sprintf("%s", str)
+			htmlString += "\n"
+		}
+		v.Data.Fields["data"] = template.HTML(`
 				<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">Test</label>
-		`)
+		` + htmlString)
 	} else if param == ":update_btn" {
-		d.Fields["data"] = template.HTML(`
+		v.Data.Fields["data"] = template.HTML(`
 			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">update</label>
 			<form>
 			<input id="insert_values" class="input_fields" type="text" placeholder="id, name, e.t.c.">
@@ -66,7 +75,7 @@ func (d *Fields) FillBaseData(c *gin.Context) {
 			<input type="submit" class="submit_buttons">
 		`)
 	} else if param == ":delete_btn" {
-		d.Fields["data"] = template.HTML(`
+		v.Data.Fields["data"] = template.HTML(`
 			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">delete</label>
 			<form>
 			<input id="insert_values" class="input_fields" type="text" placeholder="wildcard or empty">
@@ -89,7 +98,7 @@ func loadFiles(engine *gin.Engine) {
 	engine.StaticFile("/static/js/crud.js", "./static/js/crud.js")
 }
 
-func (v *View) Init() {
+func (v *View) Init(m model.IModel) {
 	var data Fields
 	data.Fields = make(map[string]any)
 	data.FillMain()
@@ -97,6 +106,7 @@ func (v *View) Init() {
 	router := gin.Default()
 	v.Data = data
 	v.Router = router
+	v.model = m
 	loadFiles(v.Router)
 	v.GET(nil)
 	v.Router.Run()
@@ -112,11 +122,11 @@ func (v *View) GET(request []interface{}) {
 		ctx.HTML(http.StatusOK, "about.html", v.Data.Fields)
 	})
 	v.Router.GET("/data.html", func(ctx *gin.Context) {
-		v.Data.FillBaseData(ctx)
+		v.FillBaseData(ctx)
 		ctx.HTML(http.StatusOK, "data.html", v.Data.Fields)
 	})
 	v.Router.GET("/data.html/:btn", func(ctx *gin.Context) {
-		v.Data.FillBaseData(ctx)
+		v.FillBaseData(ctx)
 		ctx.HTML(http.StatusOK, "data.html", v.Data.Fields)
 	})
 	v.Router.GET("/operations.html", func(ctx *gin.Context) {

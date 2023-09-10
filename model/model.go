@@ -3,6 +3,8 @@ package model
 import (
 	"database/sql"
 	"encoding/json"
+	"reflect"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -10,6 +12,7 @@ import (
 type IModel interface {
 	ConnectToDB(rawConfigFile json.RawMessage) error
 	SendResult() ([]byte, error)
+	Read(tableName string) ([][]string, error)
 }
 
 type Config struct {
@@ -28,7 +31,7 @@ func (m *Model) ConnectToDB(rawConfigFile json.RawMessage) error {
 	if err != nil {
 		return err
 	}
-	connectStr := "user=" + cf.Username + " dbname=postgresql password=" + cf.Password
+	connectStr := "user=" + cf.Username + " dbname=postgres password=" + cf.Password + " sslmode=disable"
 	db, err := sql.Open("postgres", connectStr)
 	if err != nil {
 		return err
@@ -42,4 +45,41 @@ func (m *Model) SendResult() ([]byte, error) { return nil, nil }
 
 func (m *Model) Create(values ...string) {
 
+}
+
+func (m *Model) Read(tableName string) ([][]string, error) {
+	db := m.DB
+
+	rows, err := db.Query("SELECT * FROM " + tableName)
+	if err != nil {
+		return nil, err
+	}
+	cols, _ := rows.Columns()
+	dest := []interface{}{ // Standard MySQL columns
+	}
+	for i := 0; i < len(cols); i++ {
+		dest = append(dest, new(string))
+	}
+	result := make([][]string, 0)
+	result = append(result, cols)
+	for rows.Next() {
+		err := rows.Scan(dest...)
+		parsed := make([]string, 0)
+		if err == nil {
+			for i, v := range dest {
+				typeOfRow, _ := rows.ColumnTypes()
+				switch typeOfRow[i].ScanType().String() {
+				case "time.Time":
+					t, _ := time.Parse(time.RFC3339, reflect.ValueOf(v).Elem().String())
+					format := time.Time.Format(t, "'2006-01-02 15:04:05'")
+					parsed = append(parsed, format)
+				default:
+					parsed = append(parsed, reflect.ValueOf(v).Elem().String())
+				}
+
+			}
+		}
+		result = append(result, parsed)
+	}
+	return result, nil
 }

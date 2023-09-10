@@ -7,8 +7,8 @@ import (
 	"os"
 )
 
-func initView(iv view.IView) {
-	iv.Init()
+func initView(iv view.IView, m model.IModel) {
+	iv.Init(m)
 }
 
 func initModel(im model.IModel, pathToConfig string) error {
@@ -32,5 +32,5 @@ func main() {
 		defer m.DB.Close()
 	}
 	v := new(view.View)
-	initView(v)
+	initView(v, m)
 }
