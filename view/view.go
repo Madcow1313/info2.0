@@ -9,10 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type Fields struct {
-	Fields map[string]any
-}
-
 type IView interface {
 	Init(model.IModel)
 	HandleQuery(query string)
@@ -20,11 +16,19 @@ type IView interface {
 	GET(request []interface{})
 	POST(request []interface{})
 }
+type Fields struct {
+	Fields map[string]any
+}
+
+type q struct {
+	q string `query:"value"`
+}
 
 type View struct {
-	Router *gin.Engine
-	Data   Fields
-	model  model.IModel
+	Router    *gin.Engine
+	Data      Fields
+	model     model.IModel
+	querydata q
 }
 
 func (d *Fields) FillMain() {
@@ -34,6 +38,24 @@ func (d *Fields) FillMain() {
 	<button id="data_btn" class="buttons" href="data.html">Data</button>
 	<button id="operations_btn" class="buttons" href="operations.html">Operations</button>
 	<script src="./static/js/main.js"></script></div>`)
+}
+
+func (v *View) prettyHTML(res [][]string) string {
+	var htmlString string
+	divStart := "<div class=\"parent\">"
+	divEnd := "</div>"
+	for _, str := range res {
+		htmlString += divStart
+		for _, str2 := range str {
+			htmlString += `<p style="padding: 0px; text-align: center; width: 300px; border: 1px solid; border-color: #44EB99; border-radius: 8px;>`
+			htmlString += `<label">`
+			htmlString += str2
+			htmlString += " "
+			htmlString += "</p>"
+		}
+		htmlString += divEnd
+	}
+	return htmlString
 }
 
 func (v *View) FillBaseData(c *gin.Context) {
@@ -47,14 +69,10 @@ func (v *View) FillBaseData(c *gin.Context) {
 			<input type="submit" class="submit_buttons">
 		`)
 	} else if param == ":read_btn" {
-		res, _ := v.model.Read("p2p")
-		var htmlString string
-		for _, str := range res {
-			htmlString += fmt.Sprintf("%s", str)
-			htmlString += "\n"
-		}
+		res, _ := v.model.Read(v.querydata.q)
+		htmlString := v.prettyHTML(res)
 		v.Data.Fields["data"] = template.HTML(`
-				<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">Test</label>
+				<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;"></label>
 		` + htmlString)
 	} else if param == ":update_btn" {
 		v.Data.Fields["data"] = template.HTML(`
@@ -126,6 +144,13 @@ func (v *View) GET(request []interface{}) {
 		ctx.HTML(http.StatusOK, "data.html", v.Data.Fields)
 	})
 	v.Router.GET("/data.html/:btn", func(ctx *gin.Context) {
+		var query q
+		if ctx.ShouldBind(&query) == nil {
+			v.querydata = query
+			fmt.Println("query is **", v.querydata.q)
+		} else {
+			fmt.Println("none")
+		}
 		v.FillBaseData(ctx)
 		ctx.HTML(http.StatusOK, "data.html", v.Data.Fields)
 	})
