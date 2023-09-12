@@ -8,30 +8,27 @@
 		{{ .header }}{{ .main_buttons }}
 		<br><br>
 		<div class="parent">
-			<button id="import_btn" class="load_buttons" style="margin-bottom: 20px; padding-left: 40px">Import.csv</button>
-			<button id="export_btn" class="load_buttons" style="margin-bottom: 20px; padding-left: 40px">Export.csv</button>
+			<button id="import_btn" class="load_buttons" style="margin-bottom: 20px; padding-left: 40px; margin-left: 1px">Import.csv</button>
+			<button id="export_btn" class="load_buttons" style="margin-bottom: 20px; padding-left: 40px; margin-left: 1px">Export.csv</button>
 		</div>
 		<div class="parent">
-			<button id="create_btn" class="CRUD_buttons">Create</button>
-			<button id="read_btn" class="CRUD_buttons" style="padding: 10px 56px;">Read</button>
-			<button id="update_btn" class="CRUD_buttons">Update</button>
-			<button id="delete_btn" class="CRUD_buttons" >Delete</button>
+			<button id="create_btn" class="CRUD_buttons" style="margin-left: 1px">Create</button>
+			<button id="read_btn" class="CRUD_buttons" style="padding: 10px 56px; margin-left: 1px">Read</button>
+			<button id="update_btn" class="CRUD_buttons" style="margin-left: 1px">Update</button>
+			<button id="delete_btn" class="CRUD_buttons" style="margin-left: 1px">Delete</button>
 		</div>
 		<br>
 		<div class="parent">
 		<label style="margin: 22.5px; margin-left: 10px;">Select table to perform operation</label>
 			<select id="tables" class="dropdown" style="margin: 10px; margin-left:-10px">
-			<option value="p2p" label="p2p"	 class="dropdown-content"></option>
-			<option value="peers" label="peers" class="dropdown-content"></option></select>
+				{{ .dropdown }}
+			</select>
 		</div>
 <!--		<div class="parent">-->
-			<!-- <div id="fields" style="display: flex;"> -->
+<!--			 <div id="fields" style="display: flex;">-->
 			{{ .data }}
-			<!-- </div> -->
+<!--			 </div> -->
 <!--		</div>-->
-		<div class="parent">
-
-		</div>
 		<script src="./static/js/crud.js"></script>
 	</body>
 </html>

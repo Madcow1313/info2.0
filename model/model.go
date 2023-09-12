@@ -13,6 +13,7 @@ type IModel interface {
 	ConnectToDB(rawConfigFile json.RawMessage) error
 	SendResult() ([]byte, error)
 	Read(tableName string) ([][]string, error)
+	ExecuteQuery(query string) ([][]string, error)
 }
 
 type Config struct {
@@ -41,16 +42,10 @@ func (m *Model) ConnectToDB(rawConfigFile json.RawMessage) error {
 	return nil
 }
 
-func (m *Model) SendResult() ([]byte, error) { return nil, nil }
-
-func (m *Model) Create(values ...string) {
-
-}
-
-func (m *Model) Read(tableName string) ([][]string, error) {
+func (m *Model) ExecuteQuery(query string) ([][]string, error) {
 	db := m.DB
 
-	rows, err := db.Query("SELECT * FROM " + tableName)
+	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
@@ -76,10 +71,20 @@ func (m *Model) Read(tableName string) ([][]string, error) {
 				default:
 					parsed = append(parsed, reflect.ValueOf(v).Elem().String())
 				}
-
 			}
 		}
 		result = append(result, parsed)
 	}
 	return result, nil
+}
+
+func (m *Model) SendResult() ([]byte, error) { return nil, nil }
+
+func (m *Model) Create(values ...string) {
+
+}
+
+func (m *Model) Read(tableName string) ([][]string, error) {
+	result, err := m.ExecuteQuery("SELECT * FROM " + tableName)
+	return result, err
 }

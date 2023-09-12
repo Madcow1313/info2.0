@@ -1,7 +1,6 @@
 package view
 
 import (
-	"fmt"
 	"html/template"
 	"info2_0/model"
 	"net/http"
@@ -21,14 +20,14 @@ type Fields struct {
 }
 
 type q struct {
-	q string `query:"value"`
+	Q string `query:"value"`
 }
 
 type View struct {
 	Router    *gin.Engine
 	Data      Fields
 	model     model.IModel
-	querydata q
+	querydata string
 }
 
 func (d *Fields) FillMain() {
@@ -47,7 +46,8 @@ func (v *View) prettyHTML(res [][]string) string {
 	for _, str := range res {
 		htmlString += divStart
 		for _, str2 := range str {
-			htmlString += `<p style="padding: 0px; text-align: center; width: 300px; border: 1px solid; border-color: #44EB99; border-radius: 8px;>`
+			htmlString += `<p style="padding: 0px; text-align: center; width: 300px; border: 1px solid;
+			border-color: #44EB99; border-radius: 8px;>`
 			htmlString += `<label">`
 			htmlString += str2
 			htmlString += " "
@@ -62,20 +62,23 @@ func (v *View) FillBaseData(c *gin.Context) {
 	param := c.Param("btn")
 	if param == ":create_btn" {
 		v.Data.Fields["data"] = template.HTML(`
+			<div class="parent">
 			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">insert values</label>
 			<form>
 			<input id="insert_values" class="input_fields" type="text" placeholder="insert here">
 			</form>
 			<input type="submit" class="submit_buttons">
+			</div>
 		`)
 	} else if param == ":read_btn" {
-		res, _ := v.model.Read(v.querydata.q)
+		res, _ := v.model.Read(v.querydata)
 		htmlString := v.prettyHTML(res)
 		v.Data.Fields["data"] = template.HTML(`
-				<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;"></label>
-		` + htmlString)
+				<div class="parent">
+				<label style="margin-top: -1px; margin-left: 0px; font-size: 30px;">` + v.querydata + ` table data</label></div>` + htmlString)
 	} else if param == ":update_btn" {
 		v.Data.Fields["data"] = template.HTML(`
+			<div class="parent">
 			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">update</label>
 			<form>
 			<input id="insert_values" class="input_fields" type="text" placeholder="id, name, e.t.c.">
@@ -91,9 +94,11 @@ func (v *View) FillBaseData(c *gin.Context) {
 			<input id="insert_values" class="input_fields" type="text" placeholder="condition">
 			</form>
 			<input type="submit" class="submit_buttons">
+			</div>
 		`)
 	} else if param == ":delete_btn" {
 		v.Data.Fields["data"] = template.HTML(`
+			<div class="parent">
 			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">delete</label>
 			<form>
 			<input id="insert_values" class="input_fields" type="text" placeholder="wildcard or empty">
@@ -104,6 +109,7 @@ func (v *View) FillBaseData(c *gin.Context) {
 			<input id="insert_values" class="input_fields" type="text" placeholder="condition">
 			</form>
 			<input type="submit" class="submit_buttons">
+			</div>
 		`)
 	}
 }
@@ -116,6 +122,20 @@ func loadFiles(engine *gin.Engine) {
 	engine.StaticFile("/static/js/crud.js", "./static/js/crud.js")
 }
 
+func (v *View) getTableNames() {
+	res, err := v.model.ExecuteQuery(`select table_name from information_schema.tables where table_schema='public'`)
+	if err == nil {
+		tableNames := res[1:]
+		var options string
+		for _, table := range tableNames {
+			options += `<option value="` + table[0] + `" label="` + table[0] + `" class="dropdown-content"></option>`
+		}
+		v.Data.Fields["dropdown"] = template.HTML(options)
+	} else {
+		v.Data.Fields["dropdown"] = template.HTML(`no tables in bd`)
+	}
+}
+
 func (v *View) Init(m model.IModel) {
 	var data Fields
 	data.Fields = make(map[string]any)
@@ -126,6 +146,7 @@ func (v *View) Init(m model.IModel) {
 	v.Router = router
 	v.model = m
 	loadFiles(v.Router)
+	v.getTableNames()
 	v.GET(nil)
 	v.Router.Run()
 }
@@ -144,13 +165,8 @@ func (v *View) GET(request []interface{}) {
 		ctx.HTML(http.StatusOK, "data.html", v.Data.Fields)
 	})
 	v.Router.GET("/data.html/:btn", func(ctx *gin.Context) {
-		var query q
-		if ctx.ShouldBind(&query) == nil {
-			v.querydata = query
-			fmt.Println("query is **", v.querydata.q)
-		} else {
-			fmt.Println("none")
-		}
+		str, _ := ctx.GetQuery("value")
+		v.querydata = str
 		v.FillBaseData(ctx)
 		ctx.HTML(http.StatusOK, "data.html", v.Data.Fields)
 	})
