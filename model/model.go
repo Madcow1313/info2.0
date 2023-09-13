@@ -80,8 +80,9 @@ func (m *Model) ExecuteQuery(query string) ([][]string, error) {
 
 func (m *Model) SendResult() ([]byte, error) { return nil, nil }
 
-func (m *Model) Create(values ...string) {
-
+func (m *Model) Create(values ...string) ([][]string, error) {
+	result, err := m.ExecuteQuery("SELECT * FROM ")
+	return result, err
 }
 
 func (m *Model) Read(tableName string) ([][]string, error) {
