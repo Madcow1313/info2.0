@@ -2,6 +2,7 @@ const crudButtons = document.getElementsByClassName('CRUD_buttons')
 const crudMap = new Map()
 const dropDown = document.getElementById("tables")
 
+
 if (dropDown == null) {
     console.log("null")
 } else {
@@ -13,7 +14,6 @@ crudMap.set('create_btn', 'create_fields')
 crudMap.set('read_btn', 'read_fields')
 crudMap.set('delete_btn', 'delete_fields')
 crudMap.set('update_btn', 'update_fields')
-
 
 for (const btn of crudButtons) {
     btn.addEventListener('click',
@@ -30,6 +30,15 @@ for (const btn of crudButtons) {
                 }
             }
         })
+}
+
+dropDown.onchange = function() {
+    const xhr = new XMLHttpRequest()
+    xhr.open("GET", "http://localhost:8080/data.html/:changeDrop" + "?value=" + dropDown.value)
+    xhr.send()
+    xhr.onload = () => {
+        location.reload()
+    }
 }
 
 // createBtn.addEventListener('click', ()=> {

@@ -4,6 +4,7 @@ import (
 	"html/template"
 	"info2_0/model"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,10 +25,13 @@ type q struct {
 }
 
 type View struct {
-	Router    *gin.Engine
-	Data      Fields
-	model     model.IModel
-	querydata string
+	Router      *gin.Engine
+	Data        Fields
+	model       model.IModel
+	querydata   string
+	TableNames  []string
+	TableFields map[string]string
+	current     string
 }
 
 func (d *Fields) FillMain() {
@@ -60,12 +64,20 @@ func (v *View) prettyHTML(res [][]string) string {
 
 func (v *View) FillBaseData(c *gin.Context) {
 	param := c.Param("btn")
-	if param == ":create_btn" {
+	if param == "" {
+		return
+	}
+	if param != ":changeDrop" {
+		v.current = param
+		v.querydata = c.Query("value")
+	}
+	if param == ":create_btn" || (param == ":changeDrop" && v.current == ":create_btn") {
 		v.Data.Fields["data"] = template.HTML(`
 			<div class="parent">
 			<label style="margin-top: -1px; margin-left: 0px; padding-top: 40px;">insert values</label>
 			<form>
-			<input id="insert_values" class="input_fields" type="text" placeholder="insert here">
+			<input id="insert_values" class="input_fields" type="text" placeholder="` + v.TableFields[v.querydata] + `"
+			title="` + v.TableFields[v.querydata] + `" >
 			</form>
 			<input type="submit" class="submit_buttons">
 			</div>
@@ -122,13 +134,30 @@ func loadFiles(engine *gin.Engine) {
 	engine.StaticFile("/static/js/crud.js", "./static/js/crud.js")
 }
 
-func (v *View) getTableNames() {
+func (v *View) extractTableFields() {
+	var fields string
+
+	v.TableFields = make(map[string]string)
+	for _, table := range v.TableNames {
+		rows, err := v.model.ExecuteQuery("SELECT * FROM " + table)
+		if err == nil {
+			for _, r := range rows[0] {
+				fields += r + ","
+			}
+		}
+		v.TableFields[table] = strings.TrimSuffix(fields, ",")
+		fields = ""
+	}
+}
+
+func (v *View) extractTableNames() {
 	res, err := v.model.ExecuteQuery(`select table_name from information_schema.tables where table_schema='public'`)
 	if err == nil {
 		tableNames := res[1:]
 		var options string
 		for _, table := range tableNames {
 			options += `<option value="` + table[0] + `" label="` + table[0] + `" class="dropdown-content"></option>`
+			v.TableNames = append(v.TableNames, table[0])
 		}
 		v.Data.Fields["dropdown"] = template.HTML(options)
 	} else {
@@ -146,7 +175,8 @@ func (v *View) Init(m model.IModel) {
 	v.Router = router
 	v.model = m
 	loadFiles(v.Router)
-	v.getTableNames()
+	v.extractTableNames()
+	v.extractTableFields()
 	v.GET(nil)
 	v.Router.Run()
 }

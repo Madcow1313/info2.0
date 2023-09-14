@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"reflect"
+	"strings"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -66,7 +67,9 @@ func (m *Model) ExecuteQuery(query string) ([][]string, error) {
 				switch typeOfRow[i].ScanType().String() {
 				case "time.Time":
 					t, _ := time.Parse(time.RFC3339, reflect.ValueOf(v).Elem().String())
-					format := time.Time.Format(t, "'2006-01-02 15:04:05'")
+					format := time.Time.Format(t, "2006-01-02 15:04:05")
+					format = strings.TrimSuffix(format, "00:00:00")
+					format = strings.TrimPrefix(format, "0000-01-01")
 					parsed = append(parsed, format)
 				default:
 					parsed = append(parsed, reflect.ValueOf(v).Elem().String())

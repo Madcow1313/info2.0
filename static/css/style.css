@@ -1,5 +1,5 @@
 .parent {
-	display: flex !important;
+	display: flex;
 	justify-content: center !important; 
 }
 
@@ -102,7 +102,4 @@ input[type='submit'] {
 	padding-left: 20px;
 }
 
-/* body {
-	background: linear-gradient(254deg, #861BE3 0%, #00FFC1 100%);
-	background-attachment: fixed;
-} */
+  
