@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"info2_0/controller"
 	"info2_0/model"
 	"info2_0/view"
 	"os"
 )
 
-func initView(iv view.IView, m model.IModel) {
-	iv.Init(m)
+func initView(iv view.IView, m model.IModel, c controller.Controller) {
+	iv.Init(m, c)
 }
 
 func initModel(im model.IModel, pathToConfig string) error {
@@ -31,6 +32,7 @@ func main() {
 		fmt.Println("DB connected")
 		defer m.DB.Close()
 	}
+	var controller controller.Controller
 	v := new(view.View)
-	initView(v, m)
+	initView(v, m, controller)
 }
