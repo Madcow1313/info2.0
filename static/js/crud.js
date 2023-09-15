@@ -1,14 +1,6 @@
 const crudButtons = document.getElementsByClassName('CRUD_buttons')
-const crudMap = new Map()
 const dropDown = document.getElementById("tables")
-
-
-if (dropDown == null) {
-    console.log("null")
-} else {
-    console.log("no")
-    console.log(dropDown.value)
-}
+const crudMap = new Map()
 
 crudMap.set('create_btn', 'create_fields')
 crudMap.set('read_btn', 'read_fields')
@@ -40,6 +32,8 @@ dropDown.onchange = function() {
         location.reload()
     }
 }
+
+
 
 // createBtn.addEventListener('click', ()=> {
 // 	document.getElementById('create_fields').style.display = 'flex';

@@ -50,6 +50,7 @@ func loadFiles(engine *gin.Engine) {
 	engine.StaticFile("/static/js/main.js", "./static/js/main.js")
 	engine.StaticFile("style.css", "./static/css/style.css")
 	engine.StaticFile("/static/js/crud.js", "./static/js/crud.js")
+	engine.StaticFile("/static/js/submit.js", "./static/js/submit.js")
 }
 
 func (v *View) Init(m model.IModel, c controller.Controller) {
@@ -76,9 +77,6 @@ func (v *View) Init(m model.IModel, c controller.Controller) {
 }
 
 func (v *View) SetController() {
-	// if v.Current != "" {
-	// 	v.controller.Current = v.Current
-	// }
 	v.controller.Querydata = v.Querydata
 }
 
@@ -105,6 +103,10 @@ func (v *View) GET(request []interface{}) {
 	})
 	v.Router.GET("/operations.html", func(ctx *gin.Context) {
 		ctx.HTML(http.StatusOK, "operations.html", v.Data.Fields)
+	})
+	v.Router.POST("/create_submit", func(ctx *gin.Context) {
+		v.controller.Insert(ctx)
+		ctx.HTML(http.StatusCreated, "data.html", v.controller.Data)
 	})
 }
 
