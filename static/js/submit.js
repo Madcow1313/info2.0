@@ -6,6 +6,7 @@ createSubmitBtn.addEventListener('click', () => {
     xhr.open("POST", "http://localhost:8080/create_submit" + "?drvalue=" + dropDown.value + "&values=" + insertForm.value)
     xhr.send()
     xhr.onload = () => {
+        insertForm.value = ""
         location.reload()
     } 
 })

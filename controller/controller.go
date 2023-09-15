@@ -134,8 +134,7 @@ func (c *Controller) FillBaseData(ctx *gin.Context) {
 	}
 }
 
-
-//TODO: change this
+// TODO: change this
 func (c *Controller) formatValues(values string, table string) string {
 	var formatted string
 	slice := strings.Split(values, ",")
@@ -145,13 +144,15 @@ func (c *Controller) formatValues(values string, table string) string {
 	return strings.TrimSuffix(formatted, ",")
 }
 
-func (c* Controller) fixID(values string, table string) (string, string) {
+
+//TODO: change this
+func (c *Controller) fixID(values string, table string) (string, string) {
 	var fields string
-	
+
 	if strings.HasPrefix(c.TableFields[table], "id") {
 		fields = strings.TrimPrefix(c.TableFields[table], "id,")
 		_, values, _ = strings.Cut(values, ",")
-		values = strings.ReplaceAll(values, " ","")
+		values = strings.ReplaceAll(values, " ", "")
 	} else {
 		fields = c.TableFields[table]
 	}
